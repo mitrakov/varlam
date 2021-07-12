@@ -1,0 +1,77 @@
+.app-minwidth {
+    min-width: 480px;
+}
+
+.app-header-tools {
+    height: 150px; /*app-header + app-tools*/
+}
+
+.app-header {
+    height: 80px;
+}
+
+.app-tools {
+    height: 70px;
+}
+
+.app-content {
+    height: calc(100% - 170px); /*100% - (app-header-tools + app-footer)*/
+}
+
+.app-footer-tools {
+    height: 20px;
+}
+
+/*div with height 100%*/
+.app-full {
+    height: 100%;
+}
+
+.app-full-almost {
+    height: 90%;
+}
+
+.app-half {
+    height: 50%;
+}
+
+.app-little {
+    height: 9%;
+}
+
+.app-wide {
+    width: 100%;
+}
+
+.app-vertical-container {
+    display: table;
+}
+.app-vertical-content {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.app-font-big {
+    color: #000000;
+    font: xx-large bold italic;
+    font-family: Impact, Helvetica, sans-serif;
+}
+
+.app-word-wrap {
+    white-space: normal;
+}
+
+.app-4em {
+    height: 4em;
+}
+
+.app-margin {
+    margin-bottom: 5px;
+}
+
+.app-img-logo {
+    background: url(../images/logo.jpg) no-repeat center center;
+    background-size: 100%;
+    border: solid #d58512 2px;
+    margin: 7px;
+}

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru" class="app-full app-minwidth">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GUAP Project</title>
+
+    <!-- jqWidgets CSS -->
+    <link rel="stylesheet" href="lib/jqwidgets/styles/jqx.base.css" type="text/css"/>
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- My CSS -->
+    <link href="css/main.css" rel="stylesheet">
+
+    <!--jQuery hosted min library-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <!--Bootstrap-->
+    <script src="lib/bootstrap.js"></script>
+    <!--jQuery Storage-API Plugin-->
+    <script src="lib/jquery.storageapi.min.js"></script>
+    <!--Simple Date Formatter-->
+    <script src="lib/dateformat.js"></script>
+    <!--jqWidgets Library-->
+    <script type="text/javascript" src="lib/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxsplitter.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxwindow.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxvalidator.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxpanel.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxtree.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxdragdrop.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxinput.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxnumberinput.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxdatetimeinput.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxcalendar.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxtooltip.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/globalization/globalize.js"></script>
+    <!-- My js files-->
+    <script src="scripts/request.js"></script>
+    <script src="scripts/common.js"></script>
+    <script src="scripts/tutor.js"></script>
+    <script src="scripts/main/utils.js"></script>
+    <script src="scripts/main/yes_no_dialog.js"></script>
+    <script src="scripts/main/add_person.js"></script>
+    <script src="scripts/main/add_category.js"></script>
+    <script src="scripts/main/add_item.js"></script>
+    <script src="scripts/main/add_operation.js"></script>
+    <script src="scripts/main/tree_builder.js"></script>
+    <script src="scripts/main/operations_builder.js"></script>
+    <script src="scripts/main/chart_dialog.js"></script>
+
+    <!-- IE8 support -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Code -->
+    <script>
+        $(function () {
+            $('#mainSplitter').jqxSplitter({ width: '100%', height: '100%', panels: [
+                {size: 300, min: 100, collapsible: false},
+                {min: 100, collapsible: false}
+            ]});
+            var user = $.localStorage.get('username');
+            $('#user_info').text(user && user.indexOf('$') !== 0 ? user : 'Тестовый пользователь');
+            new varlam.Common();
+            var tutor = new varlam.Tutor([
+                '#charts', '#chart_cur_month', '#chart_cur_year', '#piechart_cur_month', '#add_operation',
+                '#txt_summa', '#charts_wrapper', '#piechart_cur_month_wrapper', '#chart_categories', '#user_info'
+            ]).fire();
+            var operationsBuilder = new varlam.OperationsBuilder();
+            var treeBuilder = new varlam.TreeBuilder(operationsBuilder);
+            new varlam.AddPerson(treeBuilder);
+            new varlam.AddItem(treeBuilder);
+            new varlam.AddCategory(treeBuilder);
+            new varlam.ChartDialog(tutor);
+            var addOperation = new varlam.AddOperation(treeBuilder, tutor);
+            operationsBuilder.setAddOperation(addOperation);
+        });
+    </script>
+</head>
+<body class="app-full">
+<!-- Preloading resources -->
+<img src="images/loader.gif" hidden="hidden">
+<img src="images/logo.jpg" hidden="hidden">
+<!-- Person dialog -->
+<div id="dlg_person" hidden="hidden">
+    <div>
+        Персонажи
+    </div>
+    <div class="container app-full">
+        <div class="row app-full">
+            <div class="col-xs-6 app-full">
+                <div id="list_person"></div>
+            </div>
+            <div class="col-xs-4 col-xs-offset-1 app-full app-vertical-container">
+                <div class="app-vertical-content">
+                    <button id="btn_add_person" class="btn btn-default btn-block app-margin">Добавить</button>
+                    <div id="txt_add_person_wrapper" hidden="hidden">
+                        <input id="txt_add_person" class="form-control app-margin" type="text" placeholder="Введите имя">
+                    </div>
+                    <button id="btn_change_person" class="btn btn-default btn-block app-margin">Изменить</button>
+                    <div id="txt_change_person_wrapper" hidden="hidden">
+                        <input id="txt_change_person" class="form-control app-margin" type="text" placeholder="Введите имя">
+                     </div>
+                    <button id="btn_remove_person" class="btn btn-default btn-block app-margin">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Item dialog -->
+<div id="dlg_item" hidden="hidden">
+    <div>
+        Товары
+    </div>
+    <div class="container app-full">
+        <div class="row app-full">
+            <div class="col-xs-5 app-full">
+                <div class="app-full-almost app-margin">
+                    <div id="list_item_category"></div>
+                </div>
+                <div class="row app-little">
+                    <div class="col-xs-6 btn-group">
+                        <button id="btn_ctxt_add_category" class="btn btn-default btn-sm">+</button>
+                        <button id="btn_ctxt_add_subcategory" class="btn btn-default btn-sm">Sub</button>
+                    </div>
+                    <div id="txt_ctxt_add_category_wrapper" class="col-xs-6" hidden="hidden">
+                        <input id="txt_ctxt_add_category" class="form-control input-sm" type="text" placeholder="Категория">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 app-full">
+                <div id="list_item"></div>
+            </div>
+            <div class="col-xs-3 app-full app-vertical-container">
+                <div class="app-vertical-content">
+                    <button id="btn_add_item" class="btn btn-default btn-block app-margin">Добавить</button>
+                    <div id="txt_add_item_wrapper" hidden="hidden">
+                        <input id="txt_add_item" class="form-control app-margin" type="text" placeholder="Введите название">
+                    </div>
+                    <button id="btn_change_item" class="btn btn-default btn-block app-margin">Изменить</button>
+                    <div id="txt_change_item_wrapper" hidden="hidden">
+                        <input id="txt_change_item" class="form-control app-margin" type="text" placeholder="Введите название">
+                    </div>
+                    <button id="btn_remove_item" class="btn btn-default btn-block app-margin">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Category dialog -->
+<div id="dlg_category" hidden="hidden">
+    <div>
+        Категории
+    </div>
+    <div class="container app-full">
+        <div class="row app-full">
+            <div class="col-xs-7 app-full">
+                <div id="list_category"></div>
+            </div>
+            <div class="col-xs-5 app-full app-vertical-container">
+                <div class="app-vertical-content">
+                    <button id="btn_add_category" class="btn btn-default btn-block app-margin">Новая категория</button>
+                    <div id="txt_add_category_wrapper" hidden="hidden">
+                        <input id="txt_add_category" class="form-control app-margin" type="text" placeholder="Введите название">
+                    </div>
+                    <button id="btn_add_subcategory" class="btn btn-default btn-block app-margin">Новая подкатегория</button>
+                    <div id="txt_add_subcategory_wrapper" hidden="hidden">
+                        <input id="txt_add_subcategory" class="form-control app-margin" type="text" placeholder="Введите название">
+                    </div>
+                    <button id="btn_change_category" class="btn btn-default btn-block app-margin">Изменить</button>
+                    <div id="txt_change_category_wrapper" hidden="hidden">
+                        <input id="txt_change_category" class="form-control app-margin" type="text" placeholder="Введите название">
+                    </div>
+                    <button id="btn_remove_category" class="btn btn-default btn-block app-margin">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Operations dialog -->
+<div id="dlg_operations" hidden="hidden">
+    <div>
+        Операции
+    </div>
+    <div class="container app-full">
+        <div class="row app-full">
+            <div class="col-xs-4 app-full">
+                <div class="app-full-almost app-margin">
+                    <div id="list_op_item_category"></div>
+                </div>
+                <div class="row app-little">
+                    <div class="col-xs-6 btn-group">
+                        <button id="btn_opctxt_add_category" class="btn btn-default btn-sm">+</button>
+                        <button id="btn_opctxt_add_subcategory" class="btn btn-default btn-sm">Sub</button>
+                    </div>
+                    <div id="txt_opctxt_add_category_wrapper" class="col-xs-6" hidden="hidden">
+                        <input id="txt_opctxt_add_category" class="form-control input-sm" type="text" placeholder="Категория">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 app-full">
+                <div class="app-full-almost app-margin">
+                    <div id="list_op_item"></div>
+                </div>
+                <div class="row app-little">
+                    <div class="col-xs-3 btn-group">
+                        <button id="btn_opctxt_add_item" class="btn btn-default btn-sm">+</button>
+                    </div>
+                    <div id="txt_opctxt_add_item_wrapper" class="col-xs-9" hidden="hidden">
+                        <input id="txt_opctxt_add_item" class="form-control input-sm" type="text" placeholder="Товар">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 app-full app-vertical-container">
+                <div class="app-vertical-content">
+                    <div class="form-group">
+                        <label for="txt_summa">Сумма</label>
+                        <!-- First we use jqxNumberInput, but it appears to be full of bugs! -->
+                        <input id="txt_summa" class="form-control text-right" type="text" placeholder="Введите сумму" data-placement="left" data-trigger="manual" data-content="Выберите товарную позицию и укажите какую-нибудь сумму. Например, 999р.">
+                    </div>
+                    <div class="form-group">
+                        <label for="txt_person">Персона</label>
+                        <input id="txt_person" class="form-control" type="text" placeholder="Введите имя">
+                    </div>
+                    <div class="form-group">
+                        <label for="calendar">Дата платежа</label>
+                        <div id="calendar"></div>
+                    </div>
+                    <button id="btn_new_operation" class="btn btn-default btn-block">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Chart Dialogs -->
+<div>
+    <!-- Common dialog -->
+    <div id="chart_dlg" hidden="hidden">
+        <div>Анализ данных</div>
+        <div class="container app-full">
+            <div class="row app-full">
+                <div class="col-xs-4 app-full">
+                    <div id="chart_categories" data-placement="right" data-trigger="manual" data-content="Также вы можете фильтровать запросы по категориям"></div>
+                </div>
+                <div class="col-xs-8 app-full">
+                    <h4 class="text-center">Динамика расходов за месяц</h4>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <button id="chart_cur_month" class="btn btn-default btn-block app-word-wrap app-4em" data-placement="right" data-trigger="manual" data-content="Оцените анализ расходов по дням">
+                                Текущий месяц
+                            </button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button id="chart_2_months" class="btn btn-default btn-block app-word-wrap app-4em">Два месяца</button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button id="chart_3_months" class="btn btn-default btn-block app-word-wrap app-4em">Три месяца</button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button id="chart_arbitrary_days" class="btn btn-default btn-block app-word-wrap app-4em">Произв. диапазон</button>
+                        </div>
+                    </div>
+                    <h4 class="text-center">Динамика расходов за год</h4>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <button id="chart_cur_year" class="btn btn-default btn-block app-word-wrap app-4em" data-placement="right" data-trigger="manual" data-content="Анализ расходов по месяцам">
+                                Текущий год
+                            </button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button id="chart_2_years" class="btn btn-default btn-block app-word-wrap app-4em">Два года</button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button id="chart_3_years" class="btn btn-default btn-block app-word-wrap app-4em">Три года</button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button id="chart_arbitrary_months" class="btn btn-default btn-block app-word-wrap app-4em">Произв. диапазон</button>
+                        </div>
+                    </div>
+                    <h4 class="text-center">Соотношение расходов</h4>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div id="piechart_cur_month_wrapper" data-placement="top" data-trigger="manual" data-content="Давайте посмотрим, как изменилась доля расходов после покупки!">
+                                <button id="piechart_cur_month" class="btn btn-default btn-block app-word-wrap app-4em" data-placement="right" data-trigger="manual" data-content="И анализ расходов в виде круговой диаграммы">
+                                    Текущий месяц
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <button id="piechart_previous_month" class="btn btn-default btn-block app-word-wrap app-4em">Прошлый месяц</button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button id="piechart_2_months_ago" class="btn btn-default btn-block app-word-wrap app-4em">2 месяца назад</button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button id="piechart_arbitrary" class="btn btn-default btn-block app-word-wrap app-4em">Произв. месяц</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Arbitrary query dialog -->
+    <div id="dlg_arbitrary_query" hidden="hidden">
+        <div id="arbitrary_query_title">#</div>
+        <div class="container app-full app-vertical-container">
+            <div class="row app-full app-vertical-content">
+                <div class="col-xs-5 col-xs-offset-1 text-center app-margin">
+                    <label id="lbl_chart_1">Начало интервала</label>
+                    <div id="calendar_from"></div>
+                    <div class="row">
+                        <div class="col-xs-6 col-xs-offset-3">
+                            <div id="cmb_chart_month"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-5 text-center app-margin">
+                    <label id="lbl_chart_2">Конец интервала</label>
+                    <div id="calendar_to"></div>
+                    <div class="row">
+                        <div class="col-xs-6 col-xs-offset-3">
+                            <div id="cmb_chart_year"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button id="btn_run_arbitrary" class="btn btn-default">Показать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Result dialog -->
+    <div id="chart_window" hidden="hidden">
+        <div>Результат</div>
+        <div>
+            <img id="chart_window_img" src="">
+        </div>
+    </div>
+</div>
+<!-- Yes-No dialog -->
+<div id="dlg_yes_no" hidden="hidden">
+    <div id="dlg_yes_no_title" class="text-danger"></div>
+    <div class="app-full app-vertical-container">
+        <div class="text-center app-vertical-content">
+            <p id="dlg_yes_no_msg"></p>
+            <button id="dlg_yes_no_yes" class="btn btn-default">Да</button>
+            <button id="dlg_yes_no_no" class="btn btn-default">Нет</button>
+        </div>
+    </div>
+</div>
+<!-- About Dialog -->
+<div id="dlg_about" hidden="hidden">
+    <div>
+        О проекте
+    </div>
+    <div>
+        <p class="alert alert-success text-center"><strong>GUAP Project</strong></p>
+        <p><strong>История</strong></p>
+        <p align="justify">
+            В глобальной сети представлено весьма внушительное количество так называемых "домашних бухгалтерий".
+            Возникает вопрос: "А нужна ли ещё одна такая система? Нет ли более успешных, популярных и прибыльных
+            аналогов?". Ответ очевиден: есть!
+        </p>
+        <p align="justify">
+            Авторы проекта GUAP совсем не претендуют на создание новой "гениальной и иновационной" платформы, которую
+            непременно ждёт успех на рынке. Авторы преследовали всего лишь одну цель: формирование и закрепление
+            знаний, навыков и умений в области web-технологий. Дилетанты, скажете Вы? Уже нет!
+        </p>
+        <p align="justify">
+            Не секрет, что для освоения новых дисциплин самым эффективным методом является набор "Теория +
+            Практика". Для практики можно написать скрипт или сверстать страничку. Но почему бы не взять крупный проект
+            и попробовать довести его до рабочего состояния?
+        </p>
+        <p align="justify">
+            Вторая цель авторов: раз уж и решили написать крупный проект, то возникает откровенный вопрос: "Какой?". Вот
+            было бы здорово, чтобы готовая система приносила хоть какую-то пользу, хотя бы тем же самым авторам проекта.
+            Вот так и родилась идея написать Yet Another "домашнюю бухгалтерию". Почему? Просто в силу потребности
+            авторов. Если и Вам понравится эта система, напишите нам, и мы учтём Ваши пожелания в дальнейшей разработке.
+        </p>
+        <div class="text-center">
+            <button id="btn_dlg_about_ok" class="btn btn-default">OK</button>
+        </div>
+    </div>
+</div>
+<!--Main container-->
+<div class="container-fluid app-full" style="background: #d2e6e6">
+    <!--Row header + toolbar-->
+    <div class="row app-header-tools">
+        <!--Logo-->
+        <div class="col-lg-2 col-lg-offset-1 col-md-3 col-sm-3 hidden-xs app-full-almost">
+            <div class="img-rounded app-full app-img-logo"></div>
+        </div>
+        <div class="col-lg-8 col-md-9 col-sm-9">
+            <!--Subrow Header-->
+            <div class="row app-header hidden-xs">
+                <div class="">
+                    <div class="text-left app-half app-wide app-vertical-container">
+                        <div class="app-vertical-content app-font-big" align="center">GUAP PROJECT</div>
+                    </div>
+                </div>
+                <div align="center">
+                    <div id="user_info" class="h4" data-placement="bottom" data-trigger="manual" data-content="Попробуйте поэкспериментировать ещё! Как только будете готовы, можете завести собственную учётную запись"></div>
+                </div>
+            </div>
+            <!--Subrow Toolbar-->
+            <div class="row app-tools">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 app-full app-vertical-container">
+                    <div class="app-vertical-content">
+                        <button id="add_operation" class="btn btn-info btn-lg btn-block" data-placement="bottom" data-trigger="manual" data-content="А теперь давайте попробуем добавить новую операцию!">
+                            Операции
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 app-full app-vertical-container">
+                    <div class="app-vertical-content">
+                        <button id="add_category" class="btn btn-info btn-lg btn-block">Категории</button>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 app-full app-vertical-container">
+                    <div class="app-vertical-content">
+                        <button id="add_item" class="btn btn-info btn-lg btn-block">Товары</button>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 app-full app-vertical-container">
+                    <div class="app-vertical-content">
+                        <button id="add_person" class="btn btn-info btn-lg btn-block">Персонажи</button>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 app-full app-vertical-container">
+                    <div id="charts_wrapper" class="app-vertical-content" data-placement="left" data-trigger="manual" data-content="Вы добавили операцию? Теперь вновь проведём анализ данных">
+                        <button id="charts" class="btn btn-warning btn-lg btn-block" data-placement="left" data-trigger="manual" data-content="Мы автоматически добавили тестовые данные. Попробуйте их проанализировать!">
+                            Анализ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Row Main content-->
+    <div class="row app-content">
+        <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12 app-full">
+            <div id="mainSplitter">
+                <div class="app-full-almost app-margin splitter-panel">
+                    <div id="categories_tree" class=""></div>
+                </div>
+                <div class="splitter-panel">
+                    <div id="operations" class="list-group" style="background-color: #787878"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Row Footer-->
+    <div class="row app-footer-tools navbar-fixed-bottom hidden-xs">
+        <div class="col-lg-2 col-lg-offset-1 col-md-3 col-sm-3 col-xs-1 app-full"></div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8 text-center app-full">
+            Guap Project by Mitrakov Artem © 2014-2021
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-3 text-center app-full">
+            <strong><a id="about_project" href="#" class="text-danger">О проекте</a></strong>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

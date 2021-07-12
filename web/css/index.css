@@ -1,0 +1,105 @@
+.app-minwidth {
+    min-width: 480px;
+}
+
+.app-header-description {
+    height: 170px; /*app-header + app-description*/
+}
+
+.app-header {
+    height: 80px;
+}
+
+.app-description {
+    height: 90px;
+}
+
+.app-content {
+    height: calc(100% - 285px); /*100% - (app-header-description + app-footer-tools + 5)*/
+}
+
+.app-footer-tools {
+    height: 110px; /*app-footer + app-tools)*/
+}
+
+.app-footer {
+    height: 20px;
+}
+
+.app-tools {
+    height: 90px;
+}
+
+/*div with height 100%*/
+.app-full {
+    height: 100%;
+}
+
+.app-full-90 {
+    height: 90%;
+}
+
+.app-full-98 {
+    height: 98%;
+}
+
+.app-half {
+    height: 50%;
+}
+
+.app-wide {
+    width: 100%;
+}
+
+.app-button {
+    height: 100%;
+    border: 4px ridge #ecf1f6;
+    border-radius: 8px;
+    background-color: #498faf;
+    display: table;
+    text-align: center;
+    font: x-large bold;
+    font-family: Impact, Helvetica, sans-serif;
+    cursor: pointer;
+}
+
+.app-button:hover {
+    background-color: #397f9f;
+}
+
+.app-button:active {
+    background-color: #69afcf;
+}
+
+.app-vertical-container {
+    display: table;
+}
+.app-vertical-content {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.app-font-big {
+    color: #000000;
+    font: xx-large bold italic;
+    font-family: Impact, Helvetica, sans-serif;
+}
+
+.app-word-wrap {
+    white-space: normal;
+}
+
+.app-4em {
+    height: 4em;
+}
+
+.app-margin {
+    margin-bottom: 5px;
+}
+
+.app-img-logo {
+    background: url(../images/logo.jpg) no-repeat center center;
+    background-size: 100%;
+    border: solid #d58512 2px;
+    margin: 7px;
+}

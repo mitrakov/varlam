@@ -1,0 +1,213 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ru.tomtrix.fvds</groupId>
+    <artifactId>varlam</artifactId>
+    <packaging>war</packaging>
+    <version>1.0.0</version>
+    <name>Varlam Project</name>
+    <url>http://mitrakoff.com</url>
+    <inceptionYear>2014</inceptionYear>
+    <properties>
+        <!--Don't use Scala upper than 2.10.4 because of troubles with Redis-->
+        <scala.version>2.10.4</scala.version>
+        <db.package>${project.groupId}.db</db.package>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.custom.java.version>1.6</project.custom.java.version>
+        <maven.compiler.source>${project.custom.java.version}</maven.compiler.source>
+        <maven.compiler.target>${project.custom.java.version}</maven.compiler.target>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-Tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>scala-tools.org</id>
+            <name>Scala-Tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies>
+        <!--Scala Library-->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <!--Spring Context Management-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.0.1.RELEASE</version>
+        </dependency>
+        <!--Spring Entity & Transaction Management-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>4.0.1.RELEASE</version>
+        </dependency>
+        <!--Hibernate Java Persistence API-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.3.4.Final</version>
+        </dependency>
+        <!--Hibernate Connection Pooling-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>4.3.4.Final</version>
+        </dependency>
+        <!-- MySQL JDBC Driver
+        !!! Moved to PostgreSQL since 2014/06
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.29</version>
+        </dependency> -->
+        <!-- PostgreSQL JDBC Driver -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.5</version>
+        </dependency>
+        <!-- Servlet-API with PROVIDED scope -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--Redis Reactive Non-Blocking Library -->
+        <dependency>
+            <groupId>net.debasishg</groupId>
+            <artifactId>redisreact_2.10</artifactId>
+            <version>0.3</version>
+        </dependency>
+        <!--JFreeChart Data Visualizer Library-->
+        <dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.13</version>
+        </dependency>
+        <!--Common Library -->
+        <dependency>
+            <groupId>ru.tomtrix.fvds</groupId>
+            <artifactId>fvds-commons</artifactId>
+            <version>1.1.9</version>
+        </dependency>
+        <!--Log4J Logger-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!--Scala Build Plugin-->
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.15.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                    <args>
+                        <arg>-target:jvm-1.6</arg>
+                        <arg>-unchecked</arg>
+                        <arg>-deprecation</arg>
+                        <arg>-feature</arg>
+                    </args>
+                    <jvmArgs>
+                        <jvmArg>-Xms128m</jvmArg>
+                        <jvmArg>-Xmx1024m</jvmArg>
+                    </jvmArgs>
+                </configuration>
+            </plugin>
+            <!--Hibernate Reverse-Engineer-Plugin-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>hibernate3-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <components>
+                        <component>
+                            <name>hbm2hbmxml</name>
+                            <implementation>jdbcconfiguration</implementation>
+                            <outputDirectory>target/generated-resources/hibernate3</outputDirectory>
+                        </component>
+                        <component>
+                            <name>hbm2java</name>
+                            <implementation>jdbcconfiguration</implementation>
+                            <outputDirectory>src/main/scala</outputDirectory>
+                        </component>
+                    </components>
+                    <componentProperties>
+                        <revengfile>src/main/resources/reveng.xml</revengfile>
+                        <propertyfile>src/main/resources/hibernate.properties</propertyfile>
+                        <packagename>ru.tomtrix.fvds.db</packagename>
+                        <jdk5>true</jdk5>
+                        <ejb3>true</ejb3>
+                    </componentProperties>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>cglib</groupId>
+                        <artifactId>cglib-nodep</artifactId>
+                        <version>2.1_3</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>42.2.5</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals><goal>hbm2java</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--Deploy Tomcat7 Plugin
+            !!! Moved to Docker since 2020/05
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.0</version>
+                <configuration>
+                    <url>http://mitrakoff.com:8888/manager/text</url>
+                    <server>trix_server</server>
+                    <path>/${project.build.finalName}</path>
+                    <update>true</update>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin> -->
+        </plugins>
+    </build>
+</project>

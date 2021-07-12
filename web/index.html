@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru" class="app-full app-minwidth">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GUAP Project</title>
+
+    <!-- jqWidgets CSS -->
+    <link rel="stylesheet" href="lib/jqwidgets/styles/jqx.base.css" type="text/css"/>
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- My CSS -->
+    <link href="css/index.css" rel="stylesheet">
+
+    <!--jQuery hosted min library-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <!--Bootstrap-->
+    <script src="lib/bootstrap.js"></script>
+    <script src="http://w3resource.com/twitter-bootstrap/twitter-bootstrap-v2/js/bootstrap-tooltip.js"></script>
+    <script src="http://w3resource.com/twitter-bootstrap/twitter-bootstrap-v2/js/bootstrap-popover.js"></script>
+    <!--jQuery Storage-API Plugin-->
+    <script src="lib/jquery.storageapi.min.js"></script>
+    <!--SHA Hash algorithms-->
+    <script src="lib/sha256.js"></script>
+    <!--jqWidgets Library-->
+    <script type="text/javascript" src="lib/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxwindow.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets/jqxvalidator.js"></script>
+
+    <!-- IE8 support -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Code -->
+    <script src="scripts/request.js"></script>
+    <script src="scripts/common.js"></script>
+    <script src="scripts/tutor.js"></script>
+    <script src="scripts/index/registration.js"></script>
+    <script src="scripts/index/sign_in.js"></script>
+    <script src="scripts/index/try_now.js"></script>
+    <script src="scripts/index/mobile.js"></script>
+    <script>
+        $(function () {
+            new varlam.Common();
+            new varlam.Registration();
+            new varlam.SignIn();
+            new varlam.TryNow();
+            new varlam.Mobile();
+            new varlam.Tutor(['#try_now']).fire();
+        });
+    </script>
+</head>
+<body class="app-full">
+<!-- Preloading resources -->
+<img src="images/logo.jpg" hidden="hidden">
+<!-- Registration Dialog -->
+<div id="dlg_sign_up" hidden="hidden">
+    <div>
+        Регистрация
+    </div>
+    <div class="container text-center">
+        <div class="form-group">
+            <label for="sign_up_login">Логин</label>
+            <input id="sign_up_login" class="form-control" type="text" placeholder="Введите логин">
+        </div>
+        <div class="form-group">
+            <label for="sign_up_password">Пароль</label>
+            <input id="sign_up_password" class="form-control" type="password" placeholder="Введите пароль">
+        </div>
+        <div class="form-group">
+            <label for="sign_up_password_confirm">Подтвердите пароль</label>
+            <input id="sign_up_password_confirm" class="form-control" type="password" placeholder="Подтвердите пароль">
+        </div>
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-2">
+                <!-- Don't use buttons here because of a bug in jqWidgets -->
+                <input id="btn_sign_up_ok" class="btn btn-default btn-block" type="button" value="OK"/>
+            </div>
+            <div class="col-xs-4">
+                <!-- Don't use buttons here because of a bug in jqWidgets -->
+                <input id="btn_sign_up_cancel" class="btn btn-default btn-block" type="button" value="Отмена"/>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Auth Dialog -->
+<div id="dlg_sign_in" hidden="hidden">
+    <div>
+        Аутентификация
+    </div>
+    <div class="container text-center">
+        <div class="form-group">
+            <label for="sign_in_login">Логин</label>
+            <input id="sign_in_login" class="form-control" type="text" placeholder="Введите логин">
+        </div>
+        <div class="form-group">
+            <label for="sign_in_password">Пароль</label>
+            <input id="sign_in_password" class="form-control" type="password" placeholder="Введите пароль">
+        </div>
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-2">
+                <!-- Don't use buttons here because of a bug in jqWidgets -->
+                <input id="btn_sign_in_ok" class="btn btn-default btn-block" type="button" value="OK"/>
+            </div>
+            <div class="col-xs-4">
+                <!-- Don't use buttons here because of a bug in jqWidgets -->
+                <input id="btn_sign_in_cancel" class="btn btn-default btn-block" type="button" value="Отмена"/>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Try Now Dialog -->
+<div id="dlg_try_now" hidden="hidden">
+    <div>
+        Try now!
+    </div>
+    <div class="text-center">
+        <div class="form-group">
+            <label for="try_now_ok">Поздравляем</label><br>
+            <!-- Don't use buttons here because of a bug in jqWidgets -->
+            <input id="try_now_ok" class="btn btn-default" type="button" value="OK"/>
+        </div>
+    </div>
+</div>
+<!-- Not Implemented Dialog -->
+<div id="dlg_not_implemented" hidden="hidden">
+    <div>
+        Not Implemented
+    </div>
+    <div class="text-center">
+        <p class="alert alert-danger">Not implemented yet...</p>
+        <p>Приносим свои извинения. Компонент находится в разработке</p>
+        <button id="btn_not_implemented_ok" class="btn btn-default">OK</button>
+    </div>
+</div>
+<!-- About Dialog -->
+<div id="dlg_about" hidden="hidden">
+    <div>
+        О проекте
+    </div>
+    <div>
+        <p class="alert alert-success text-center"><strong>GUAP Project</strong></p>
+        <p><strong>История</strong></p>
+        <p align="justify">
+            В глобальной сети представлено весьма внушительное количество так называемых "домашних бухгалтерий".
+            Возникает вопрос: "А нужна ли ещё одна такая система? Нет ли более успешных, популярных и прибыльных
+            аналогов?". Ответ очевиден: есть!
+        </p>
+        <p align="justify">
+            Авторы проекта GUAP совсем не претендуют на создание новой "гениальной и иновационной" платформы, которую
+            непременно ждёт успех на рынке. Авторы преследовали всего лишь одну цель: формирование и закрепление
+            знаний, навыков и умений в области web-технологий. Дилетанты, скажете Вы? Уже нет!
+        </p>
+        <p align="justify">
+            Не секрет, что для освоения новых дисциплин самым эффективным методом является набор "Теория +
+            Практика". Для практики можно написать скрипт или сверстать страничку. Но почему бы не взять крупный проект
+            и попробовать довести его до рабочего состояния?
+        </p>
+        <p align="justify">
+            Вторая цель авторов: раз уж и решили написать крупный проект, то возникает откровенный вопрос: "Какой?". Вот
+            было бы здорово, чтобы готовая система приносила хоть какую-то пользу, хотя бы тем же самым авторам проекта.
+            Вот так и родилась идея написать Yet Another "домашнюю бухгалтерию". Почему? Просто в силу потребности
+            авторов. Если и Вам понравится эта система, напишите нам, и мы учтём Ваши пожелания в дальнейшей разработке.
+        </p>
+        <div class="text-center">
+            <button id="btn_dlg_about_ok" class="btn btn-default">OK</button>
+        </div>
+    </div>
+</div>
+<!-- Main container -->
+<div class="container-fluid app-full" style="background: #d2e6e6">
+    <div class="row app-header-description app-margin">
+        <!--Logo-->
+        <div class="col-lg-2 col-lg-offset-1 col-md-3 col-sm-3 hidden-xs app-full-90">
+            <div class="img-rounded app-full app-img-logo"></div>
+        </div>
+        <div class="col-lg-8 col-md-9 col-sm-9">
+            <div class="row app-header">
+                <div class="col-lg-4 col-lg-offset-3 col-md-4 col-md-offset-3 col-sm-4 col-sm-offset-1 col-xs-6 app-full">
+                    <div class="text-left app-half app-wide app-vertical-container">
+                        <div class="app-vertical-content app-font-big">G U A P</div>
+                    </div>
+                    <div class="text-center app-half app-wide app-vertical-container">
+                        <div class="app-vertical-content app-font-big">P R O J E C T</div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-lg-offset-1 col-md-2 col-md-offset-1 col-sm-3 col-sm-offset-1 col-xs-3 app-full app-vertical-container">
+                    <div class="app-vertical-content">
+                        <button id="btn_mobile" class="btn btn-default btn-block app-word-wrap app-4em">Мобильная версия</button>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app-full app-vertical-container">
+                    <div class="app-vertical-content">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle app-4em" data-toggle="dropdown">
+                                Rus <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" data-role="menu">
+                                <li><a id="lang_ru" href="#">Rus</a></li>
+                                <li><a id="lang_en" href="#">Eng</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-1 col-xs-1"></div>
+            </div>
+            <div class="row app-description">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="text-center" style="width: 80%"><strong>GUAP - это проект для ведения учёта и анализа повседневных расходов</strong></div>
+                    Хотите узнать, куда уходят Ваши деньги? Желаете проследить динамику Ваших затрат и процентное
+                    соотношение покупок за текущий месяц? Некоммерческий проект GUAP поможет вам проследить, каким
+                    образом расходуется Ваш бюджет и спланировать Ваши затраты в будущем. Нажмите "Испытать" и оцените
+                    возможности системы на тестовых данных.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row app-content">
+        <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2 app-full-98">
+            <!-- Сarousel -->
+            <div id="carousel-chart" class="carousel slide app-full" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                </ol>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner app-full">
+                    <div class="item active app-full">
+                        <img src="images/chart1.jpg" class="app-wide" style="height: 100%"> <!--Use style height:100%, not class!-->
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="item app-full">
+                        <img src="images/chart2.jpg" class="app-wide" style="height: 100%"> <!--Use style height:100%, not class!-->
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="item app-full">
+                        <img src="images/chart3.jpg" class="app-wide" style="height: 100%"> <!--Use style height:100%, not class!-->
+                        <div class="carousel-caption"></div>
+                    </div>
+                </div>
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-chart" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-chart" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row navbar-fixed-bottom app-footer-tools">
+        <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12">
+            <div class="app-tools">
+                <div class="row app-full">
+                    <div class="col-lg-2 col-lg-offset-2 col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-2 col-xs-4 app-button">
+                        <div id="register" class="app-vertical-content">Регистрация</div>
+                    </div>
+                    <div class="col-lg-2 col-lg-offset-1 col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-1 col-xs-4 app-button">
+                        <div id="sign_in" class="app-vertical-content">Войти</div>
+                    </div>
+                    <div class="col-lg-2 col-lg-offset-1 col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-1 col-xs-4 app-button">
+                        <div id="try_now" class="app-vertical-content" data-placement="top" data-trigger="manual" data-content="Впервые на сайте? Попробуйте протестировать систему без регистрации!">Испытать</div>
+                    </div>
+                </div>
+            </div>
+            <div class="app-footer">
+                <div class="col-lg-2 col-lg-offset-1 col-md-3 col-sm-3 col-xs-1 app-full"></div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8 text-center app-full">
+                    Guap Project by Mitrakov Artem © 2014-2021
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-3 col-xs-3 text-center app-full">
+                    <strong><a id="about_project" href="#" class="text-danger">О проекте</a></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering SYSTEM "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+
+    <!-- Category table -->
+    <table name="category" schema ="public">
+        <primary-key>
+            <generator class="identity">
+                <param name="table">category_category_id_seq</param>
+            </generator>
+            <key-column name="category_id"/>
+        </primary-key>
+    </table>
+
+    <!-- Item table -->
+    <table name="item" schema ="public">
+        <primary-key>
+            <generator class="identity">
+                <param name="table">item_item_id_seq</param>
+            </generator>
+            <key-column name="item_id"/>
+        </primary-key>
+    </table>
+
+    <!-- Operation table -->
+    <table name="operation" schema ="public">
+        <primary-key>
+            <generator class="identity">
+                <param name="table">operation_operation_id_seq</param>
+            </generator>
+            <key-column name="operation_id"/>
+        </primary-key>
+    </table>
+
+    <!-- Person table -->
+    <table name="person" schema ="public">
+        <primary-key>
+            <generator class="identity">
+                <param name="table">person_person_id_seq</param>
+            </generator>
+            <key-column name="person_id"/>
+        </primary-key>
+    </table>
+
+    <!-- Usr table -->
+    <table name="usr" schema ="public">
+        <primary-key>
+            <generator class="identity">
+                <param name="table">user_user_id_seq</param>
+            </generator>
+            <key-column name="user_id"/>
+        </primary-key>
+    </table>
+
+</hibernate-reverse-engineering>

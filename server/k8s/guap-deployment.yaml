@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guap
+  namespace: tomsther
+spec:
+  selector:
+    matchLabels:
+      app: guap-label
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: guap-label
+    spec:
+      containers:
+        - name: guap
+          image: mitrakov/guap
+          imagePullPolicy: Always
+          ports:
+            - name: guap-port
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi

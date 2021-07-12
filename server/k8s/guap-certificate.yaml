@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: le-crt-guap
+spec:
+  secretName: tls-secret-guap
+  issuerRef:
+    kind: Issuer
+    name: letsencrypt
+  commonName: guap.mitrakoff.com
+  dnsNames:
+    - guap.mitrakoff.com
