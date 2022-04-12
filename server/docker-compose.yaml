@@ -1,0 +1,22 @@
+# deprecated: use k8s/ instead
+version: '3.3'
+
+services:
+  db:
+    image: postgres:10
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: varlam
+      POSTGRES_USER: mitrakov
+      POSTGRES_PASSWORD: 541888
+
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
+
+  guap:
+    image: mitrakov/guap
+    ports:
+      - "80:8080"
