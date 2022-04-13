@@ -50,7 +50,7 @@ class VarlamPieChart extends VarlamServlet {
       val fname = randomString + ".png"
       new File(s"/usr/local/tomcat/webapps/guap/charts/$today").mkdirs
       ChartUtilities.saveChartAsPNG(new File(s"/usr/local/tomcat/webapps/guap/charts/$today", fname), chart, 640, 480)
-      s"https://$host/guap/charts/$today/$fname"
+      s"http://$host/guap/charts/$today/$fname"
     }
     url match {
       case Some(s) => Result(resp, 200, 0, Map("url" -> s)).write()

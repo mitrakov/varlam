@@ -24,6 +24,11 @@ Populate Redis storage (with backup or manually):
 set Tommy "..."
 ```
 
+Switch to Java8, if necessary
+```shell script
+sdk use java 8.302.08.1-amzn
+```
+
 Build FVDS-commons dependency:
 ```shell script
 # navigate to a library project and run:

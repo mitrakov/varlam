@@ -8,7 +8,7 @@
      * @constructor
      */
     varlam.Request = function(path, data, method) {
-        var url = 'https://guap.mitrakoff.com/varlam' + (path.charAt(0) === '/' ? '' : '/') + path;
+        var url = 'http://mitrakoff.com:8080/varlam' + (path.charAt(0) === '/' ? '' : '/') + path;
         return $.ajax(url, {
             type: method || undefined,
             headers: {

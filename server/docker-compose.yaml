@@ -2,21 +2,26 @@
 version: '3.3'
 
 services:
+  guap:
+    image: mitrakov/guap-docker-compose
+    depends_on:
+      - db
+      - redis
+    ports:
+      - 8080:8080
+
   db:
     image: postgres:10
+    hostname: postgres-service
     ports:
-      - "5432:5432"
+      - 5432:5432
     environment:
       POSTGRES_DB: varlam
       POSTGRES_USER: mitrakov
-      POSTGRES_PASSWORD: 541888
+      POSTGRES_PASSWORD: 65418886
 
   redis:
-    image: "redis"
+    image: redis
+    hostname: redis-service
     ports:
-      - "6379:6379"
-
-  guap:
-    image: mitrakov/guap
-    ports:
-      - "80:8080"
+      - 6379:6379
