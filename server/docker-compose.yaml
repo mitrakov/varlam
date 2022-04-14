@@ -1,9 +1,11 @@
 # deprecated: use k8s/ instead
+# important! requires 'docker-compose' v1.29.1+. Otherwise redis doesn't work for some reason
 version: '3.3'
 
 services:
   guap:
     image: mitrakov/guap-docker-compose
+    pull_policy: always
     depends_on:
       - db
       - redis
