@@ -1,5 +1,5 @@
 # deprecated: use k8s/ instead
-# important! requires 'docker-compose' v1.29.1+. Otherwise redis doesn't work for some reason
+# important! requires 'docker-compose' v1.29.1+. Otherwise redis network doesn't work
 version: '3.3'
 
 services:
@@ -17,6 +17,8 @@ services:
     hostname: postgres-service
     ports:
       - 5432:5432
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: varlam
       POSTGRES_USER: mitrakov
