@@ -25,7 +25,11 @@ services:
       POSTGRES_PASSWORD: 65418886
 
   redis:
-    image: redis
+    image: bitnami/redis
     hostname: redis-service
     ports:
       - 6379:6379
+    volumes:
+      - ./redis-data:/data
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
