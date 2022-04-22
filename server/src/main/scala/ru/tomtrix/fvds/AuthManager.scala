@@ -26,7 +26,7 @@ object AuthManager {
   implicit private val timeout = Timeout(3 seconds)
 
   /** Redis Client */
-  private val redis = RedisClient(K8S_REDIS_HOST, K8S_REDIS_PORT)
+  private val redis = new RedisClient(K8S_REDIS_HOST, K8S_REDIS_PORT, secret = Some("65418886"))
 
   /** Map {Username -> Token} */
   private val users = new ConcurrentHashMap[String, String]()
@@ -42,7 +42,7 @@ object AuthManager {
     else if (getUser(username).isDefined) Future.failed(new RuntimeException("Username is busy"))
     else { // it'd better wrap to a transaction
       dao.persist(new Usr(username))
-      redis.set(username, hash)
+      Future(redis.set(username, hash))
     }
   }
 
@@ -55,7 +55,7 @@ object AuthManager {
   def checkHash(username: String, hash: String): Future[Boolean] = {
     logger debug s"Checking $username with hash $hash"
     if (username.isBlank || hash.isBlank) Future.failed(new RuntimeException("Specify username & password"))
-    else redis.get[String](username) map {
+    else Future(redis.get[String](username)) map {
       case Some(s) => s == hash.str
       case None => false
     }

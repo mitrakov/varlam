@@ -88,8 +88,8 @@
         <!--Redis Reactive Non-Blocking Library -->
         <dependency>
             <groupId>net.debasishg</groupId>
-            <artifactId>redisreact_2.10</artifactId>
-            <version>0.3</version>
+            <artifactId>redisclient_2.10</artifactId>
+            <version>2.13</version>
         </dependency>
         <!--JFreeChart Data Visualizer Library-->
         <dependency>

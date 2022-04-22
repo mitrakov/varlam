@@ -1,3 +1,5 @@
+.idea/
 server/target/
 *.class
 *.log
+*.iml
