@@ -24,12 +24,13 @@ services:
       POSTGRES_USER: mitrakov
       POSTGRES_PASSWORD: 65418886
 
+  # make sure to set 777 on "redis-data" directory
   redis:
     image: bitnami/redis
     hostname: redis-service
     ports:
       - 6379:6379
     volumes:
-      - ./redis-data:/data
+      - ./redis-data:/bitnami/redis/data/
     environment:
       REDIS_PASSWORD: 65418886
