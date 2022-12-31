@@ -1,5 +1,5 @@
 package ru.tomtrix.fvds.db;
-// Generated Jun 20, 2014 5:23:06 PM by Hibernate Tools 3.2.2.GA
+// Generated 31-Dec-2022 18:01:11 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.HashSet;
@@ -23,14 +23,13 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name="item"
     ,schema="public"
-    , uniqueConstraints = @UniqueConstraint(columnNames={"user_id", "name"}) 
+    , uniqueConstraints = @UniqueConstraint(columnNames={"category_id", "name"}) 
 )
 public class Item  implements java.io.Serializable {
 
 
      private Long itemId;
      private Category category;
-     private Usr usr;
      private String name;
      private Set<Operation> operations = new HashSet<Operation>(0);
 
@@ -38,14 +37,12 @@ public class Item  implements java.io.Serializable {
     }
 
 	
-    public Item(Category category, Usr usr, String name) {
+    public Item(Category category, String name) {
         this.category = category;
-        this.usr = usr;
         this.name = name;
     }
-    public Item(Category category, Usr usr, String name, Set<Operation> operations) {
+    public Item(Category category, String name, Set<Operation> operations) {
        this.category = category;
-       this.usr = usr;
        this.name = name;
        this.operations = operations;
     }
@@ -68,15 +65,6 @@ public class Item  implements java.io.Serializable {
     
     public void setCategory(Category category) {
         this.category = category;
-    }
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable=false)
-    public Usr getUsr() {
-        return this.usr;
-    }
-    
-    public void setUsr(Usr usr) {
-        this.usr = usr;
     }
     
     @Column(name="name", nullable=false, length=64)

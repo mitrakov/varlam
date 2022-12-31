@@ -6,29 +6,36 @@ import scala.util.Random
 import scala.compat.Platform
 import org.apache.log4j.Logger
 import org.springframework.context.support.ClassPathXmlApplicationContext
-import ru.tomtrix.fvds.Finder._
 
 /**
- * Global application singleton
+ * Starting point. Try: "`curl mitrakoff.com:8080/varlam/version`".
+ *
+ * 1. Use only Java 8 to build this app (e.g. "`sdk use java 8.302.08.1-amzn`")
+ *
+ * 2. After changes, don't forget to update version in [[ru.tomtrix.fvds.servlets.VarlamVersion VarlamVersion]].
+ *
+ * 3. All DAO are being updated automatically using DB schema on mitrakoff.com (run "mvn package").
+ *
+ * 4. To build app, run "`mvn package`", then "`docker build -t mitrakov/guap-docker-compose .`", then "`docker push mitrakov/guap-docker-compose`"
  */
 object Starter {
   /** Spring XML context */
   private val factory = new ClassPathXmlApplicationContext("trix.xml")
 
   /** Entity Manager Factory<br>'''ATTENTION!''' it must be closed before the application shutdown */
-  val emf = factory.getBean("entityManagerFactory").asInstanceOf[EntityManagerFactory]
+  val emf: EntityManagerFactory = factory.getBean("entityManagerFactory").asInstanceOf[EntityManagerFactory]
 
   /** Data Access Object that provides all JPA capabilities */
-  val dao = factory.getBean("dao").asInstanceOf[DAO]
+  val dao: DAO = factory.getBean("dao").asInstanceOf[DAO]
 
   /** Cache used to store the operations */
-  val operationCache = factory.getBean("operationCache").asInstanceOf[CacheManager]
+  val operationCache: CacheManager = factory.getBean("operationCache").asInstanceOf[CacheManager]
 
   /** Datetime formatter */
   val formatter = new SimpleDateFormat("dd-MM-yyyy")
 
   /** Global logger */
-  val logger = Logger.getLogger("mainLogger")
+  val logger: Logger = Logger.getLogger("mainLogger")
 
   /** Random generator */
   val rand = new Random(Platform.currentTime)

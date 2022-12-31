@@ -21,7 +21,10 @@ class VarlamNewItem extends VarlamServlet {
       categoryName <- json get "category" map {_.toString.str}
       user <- getUser(req.getHeader("username").str)
       category <- getCategory(user, categoryName)
-    } yield {dao persist new Item(category, user, itemName); itemName}
+    } yield {
+      dao persist new Item(category, itemName)
+      itemName
+    }
     result match {
       case Some(x) => Result(resp, 200, 0, Map("msg" -> s"Item $x saved")).write()
       case None => Result(resp, 400, 20).write()

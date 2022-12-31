@@ -1,5 +1,5 @@
 package ru.tomtrix.fvds.db;
-// Generated Jun 20, 2014 5:23:06 PM by Hibernate Tools 3.2.2.GA
+// Generated 31-Dec-2022 18:01:11 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -27,27 +27,27 @@ public class Operation  implements java.io.Serializable {
 
      private Long operationId;
      private Item item;
-     private Usr usr;
      private Person person;
      private Date time;
      private int summa;
+     private String currency;
 
     public Operation() {
     }
 
 	
-    public Operation(Item item, Usr usr, Date time, int summa) {
+    public Operation(Item item, Date time, int summa, String currency) {
         this.item = item;
-        this.usr = usr;
         this.time = time;
         this.summa = summa;
+        this.currency = currency;
     }
-    public Operation(Item item, Usr usr, Person person, Date time, int summa) {
+    public Operation(Item item, Person person, Date time, int summa, String currency) {
        this.item = item;
-       this.usr = usr;
        this.person = person;
        this.time = time;
        this.summa = summa;
+       this.currency = currency;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -68,15 +68,6 @@ public class Operation  implements java.io.Serializable {
     
     public void setItem(Item item) {
         this.item = item;
-    }
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable=false)
-    public Usr getUsr() {
-        return this.usr;
-    }
-    
-    public void setUsr(Usr usr) {
-        this.usr = usr;
     }
 @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="person_id")
@@ -104,6 +95,15 @@ public class Operation  implements java.io.Serializable {
     
     public void setSumma(int summa) {
         this.summa = summa;
+    }
+    
+    @Column(name="currency", nullable=false, length=3)
+    public String getCurrency() {
+        return this.currency;
+    }
+    
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
 

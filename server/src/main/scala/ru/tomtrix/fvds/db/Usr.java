@@ -1,5 +1,5 @@
 package ru.tomtrix.fvds.db;
-// Generated Jun 20, 2014 5:23:06 PM by Hibernate Tools 3.2.2.GA
+// Generated 31-Dec-2022 18:01:11 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.HashSet;
@@ -28,10 +28,8 @@ public class Usr  implements java.io.Serializable {
 
      private Long userId;
      private String username;
-     private Set<Operation> operations = new HashSet<Operation>(0);
      private Set<Category> categories = new HashSet<Category>(0);
      private Set<Person> persons = new HashSet<Person>(0);
-     private Set<Item> items = new HashSet<Item>(0);
 
     public Usr() {
     }
@@ -40,12 +38,10 @@ public class Usr  implements java.io.Serializable {
     public Usr(String username) {
         this.username = username;
     }
-    public Usr(String username, Set<Operation> operations, Set<Category> categories, Set<Person> persons, Set<Item> items) {
+    public Usr(String username, Set<Category> categories, Set<Person> persons) {
        this.username = username;
-       this.operations = operations;
        this.categories = categories;
        this.persons = persons;
-       this.items = items;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -68,14 +64,6 @@ public class Usr  implements java.io.Serializable {
         this.username = username;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="usr")
-    public Set<Operation> getOperations() {
-        return this.operations;
-    }
-    
-    public void setOperations(Set<Operation> operations) {
-        this.operations = operations;
-    }
-@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="usr")
     public Set<Category> getCategories() {
         return this.categories;
     }
@@ -90,14 +78,6 @@ public class Usr  implements java.io.Serializable {
     
     public void setPersons(Set<Person> persons) {
         this.persons = persons;
-    }
-@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="usr")
-    public Set<Item> getItems() {
-        return this.items;
-    }
-    
-    public void setItems(Set<Item> items) {
-        this.items = items;
     }
 
 

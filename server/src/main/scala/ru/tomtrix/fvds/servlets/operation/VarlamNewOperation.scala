@@ -24,10 +24,11 @@ class VarlamNewOperation extends VarlamServlet {
       summa <- json get "summa" map {_.asInstanceOf[Double].toInt}
       user <- getUser(req.getHeader("username").str)
       item <- getItem(user, itemName)
+      currency = json get "currency" map {_.toString.str} getOrElse "RUB"
     } yield {
       val date = json get "date" map {s => formatter parse s.toString} getOrElse new Date()
       logger.info("Date received: " + DateFormat.getInstance().format(date))
-      val operation = new Operation(item, user, null, date, summa)
+      val operation = new Operation(item, null, date, summa, currency)
       getPerson(user, personName) foreach operation.setPerson
       dao persist operation
       itemName -> summa
