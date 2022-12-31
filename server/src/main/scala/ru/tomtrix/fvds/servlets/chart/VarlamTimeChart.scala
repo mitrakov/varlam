@@ -19,6 +19,7 @@ import ru.tomtrix.fvds.servlets.VarlamServlet
  */
 @WebServlet(urlPatterns = Array("/chart/time"))
 class VarlamTimeChart extends VarlamServlet {
+  // TODO: maybe incorrect after introducing currency field
   override def doPut(req: HttpServletRequest, resp: HttpServletResponse): Unit = authenticated(req, resp) {
     val json = req.getReader.readLine.asJsonObject
     val url = for {

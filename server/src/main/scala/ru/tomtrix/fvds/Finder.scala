@@ -15,6 +15,7 @@ object Finder extends DAO {
    * @return Option[ResultType]
    */
   def getUserFunc[T](username: String)(f: Usr => T): Option[T] = {
+    logger info s"Finding user $username in DB"
     dao.findSingleBySQL("SELECT * FROM usr WHERE username = :x", classOf[Usr], Map("x" -> username)){f}
   }
 
@@ -53,7 +54,7 @@ object Finder extends DAO {
    * @return Option[ResultType]
    */
   def getItemFunc[T](u: Usr, itemName: String)(f: Item => T): Option[T] = {
-    dao.findSingleBySQL("SELECT * FROM item WHERE user_id = :x AND name = :y", classOf[Item],
+    dao.findSingleBySQL("SELECT * FROM item JOIN category USING (category_id) WHERE user_id = :x AND item.name = :y", classOf[Item],
       Map("x" -> u.getUserId, "y" -> itemName)){f}
   }
 
@@ -76,7 +77,7 @@ object Finder extends DAO {
    * @return Option[ResultType]
    */
   def getOperationsFunc[T](u: Usr)(f: Operation => T): List[T] = {
-    dao.findBySQL("SELECT * FROM operation WHERE user_id = :x", classOf[Operation], Map("x" -> u.getUserId)){f}
+    dao.findBySQL("SELECT * FROM operation JOIN item USING (item_id) JOIN category USING (category_id) WHERE user_id = :x", classOf[Operation], Map("x" -> u.getUserId)){f}
   }
 
   /**

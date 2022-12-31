@@ -25,7 +25,7 @@ class VarlamChangeCategory extends VarlamServlet {
     } yield {
       val parentName = parentNameOpt getOrElse "NULL"
       category setName newCategoryName
-      category.setCategory(getCategory(user, newParentName) getOrElse null)
+      category.setCategory(getCategory(user, newParentName).orNull)
       dao merge category
       getOperations(user) foreach {op => operationCache removeFromCache op.getOperationId}
       (categoryName -> parentName) -> (newCategoryName -> newParentName)

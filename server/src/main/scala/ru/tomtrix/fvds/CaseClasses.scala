@@ -22,7 +22,7 @@ object CaseClasses {
     /**
      * Commits the HTTP result, sends response to a client & flushes the buffers
      */
-    def write() {
+    def write(): Unit = {
       val json = JSONObject(getDescription(code) ++ m + ("code" -> code))
       logger debug s"""Response "$json" sent to client with status=$status """
       resp.setCharacterEncoding("UTF-8")

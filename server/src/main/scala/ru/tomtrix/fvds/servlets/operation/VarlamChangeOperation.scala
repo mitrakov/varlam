@@ -30,7 +30,7 @@ class VarlamChangeOperation extends VarlamServlet {
       newItem <- getItem(user, newItemName)
     } yield {
       val date = json get "date" map {s => formatter parse s.toString} getOrElse new Date()
-      operation.setPerson(getPerson(user, newPersonName) getOrElse null)
+      operation.setPerson(getPerson(user, newPersonName).orNull)
       operation setItem newItem
       operation setSumma newSumma
       operation setTime date

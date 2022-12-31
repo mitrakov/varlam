@@ -19,7 +19,7 @@ class VarlamListCategoryPlain extends VarlamServlet {
 
     // recursive traversal of categories tree
     def f(category: Category): List[String] =
-      category.getName :: category.getCategories.toArray(Array.empty[Category]).toList.map{f}.flatten
+      category.getName :: category.getCategories.toArray(Array.empty[Category]).toList.flatMap(f)
 
     //MySQL: val sql = "SELECT * FROM category WHERE user_id = :x AND ISNULL(parent_id)"
     val sql = "SELECT * FROM category WHERE user_id = :x AND parent_id ISNULL"

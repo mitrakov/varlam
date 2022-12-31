@@ -20,7 +20,7 @@ class VarlamListItem extends VarlamServlet {
       user <- getUser(req.getHeader("username"))
       category <- getCategory(user, req.getParameter("category").str)
     } yield {
-      val sql = "SELECT * FROM item WHERE user_id = :x AND category_id = :y"
+      val sql = "SELECT * FROM item JOIN category USING (category_id) WHERE user_id = :x AND category_id = :y"
       dao.findBySQL(sql, classOf[Item], Map("x" -> user.getUserId, "y" -> category.getCategoryId)) {_.getName}
     }) getOrElse Nil
     Result(resp, 200, 0, Map("msg" -> JSONArray(result))).write()

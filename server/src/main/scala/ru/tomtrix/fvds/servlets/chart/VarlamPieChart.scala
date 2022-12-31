@@ -19,6 +19,7 @@ import ru.tomtrix.fvds.servlets.VarlamServlet
  */
 @WebServlet(urlPatterns = Array("/chart/pie"))
 class VarlamPieChart extends VarlamServlet {
+  // TODO: maybe incorrect after introducing currency field
   override def doPut(req: HttpServletRequest, resp: HttpServletResponse): Unit = authenticated(req, resp) {
     val json = req.getReader.readLine.asJsonObject
     val url = for {
@@ -28,10 +29,10 @@ class VarlamPieChart extends VarlamServlet {
     } yield {
       /*MySQL:
       val sql = "SELECT category.name, sum(summa) AS s FROM operation JOIN item USING(item_id) JOIN category USING" +
-        "(category_id) WHERE operation.user_id = :x AND month(time) = :y AND year(time) = :z " +
+        "(category_id) WHERE user_id = :x AND month(time) = :y AND year(time) = :z " +
         "GROUP BY category.name ORDER BY s DESC"*/
-      val sql = "SELECT category.name, sum(summa) AS s FROM operation JOIN item USING(item_id) JOIN category USING" +
-        "(category_id) WHERE operation.user_id = :x AND EXTRACT(MONTH FROM time) = :y AND EXTRACT(YEAR FROM time) = :z " +
+      val sql = "SELECT category.name, sum(summa) AS s FROM operation JOIN item USING(item_id) JOIN category USING " +
+        "(category_id) WHERE user_id = :x AND EXTRACT(MONTH FROM time) = :y AND EXTRACT(YEAR FROM time) = :z " +
         "GROUP BY category.name ORDER BY s DESC"
       val data = dao.findBySQL(sql, Map("x" -> user.getUserId, "y" -> month, "z" -> year)) { q =>
         //MySQL: q(0).asInstanceOf[String] -> q(1).asInstanceOf[java.math.BigDecimal].toBigInteger.intValue
