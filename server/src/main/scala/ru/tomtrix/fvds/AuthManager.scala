@@ -1,7 +1,6 @@
 package ru.tomtrix.fvds
 
 import java.util.concurrent.ConcurrentHashMap
-import scala.language._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import akka.util.Timeout
@@ -23,7 +22,7 @@ object AuthManager {
   // Redis dependencies
   implicit private val system: ActorSystem = ActorSystem("redis-client")
   implicit private val executionContext: ExecutionContext = system.dispatcher
-  implicit private val timeout: Timeout = Timeout(3 seconds)
+  implicit private val timeout: Timeout = Timeout(3.seconds)
 
   /** Redis Client */
   private val redis = new RedisClient(K8S_REDIS_HOST, K8S_REDIS_PORT, secret = Some("65418886"))

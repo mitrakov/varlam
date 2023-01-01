@@ -22,8 +22,8 @@ class VarlamGetOperation extends VarlamServlet {
           "item" -> operation.item,
           "category" -> operation.category,
           "summa" -> operation.summa,
-          "person" -> operation.person.getOrElse("")
-        ))
+          "currency" -> operation.currencyCode
+        ) ++ operation.person.map("person" -> _) ++ operation.currencyRate.map("currencyRate" -> _))
         Result(resp, 200, 0, Map("operation" -> json)).write()
       case None => Result(resp, 404, 33).write()
     }

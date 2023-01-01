@@ -1,7 +1,8 @@
 package ru.tomtrix.fvds.db;
-// Generated 31-Dec-2022 18:01:11 by Hibernate Tools 3.2.2.GA
+// Generated 01-Jan-2023 18:03:15 by Hibernate Tools 3.2.2.GA
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,25 +30,27 @@ public class Operation  implements java.io.Serializable {
      private Item item;
      private Person person;
      private Date time;
-     private int summa;
+     private BigDecimal summa;
      private String currency;
+     private BigDecimal currencyRate;
 
     public Operation() {
     }
 
 	
-    public Operation(Item item, Date time, int summa, String currency) {
+    public Operation(Item item, Date time, BigDecimal summa, String currency) {
         this.item = item;
         this.time = time;
         this.summa = summa;
         this.currency = currency;
     }
-    public Operation(Item item, Person person, Date time, int summa, String currency) {
+    public Operation(Item item, Person person, Date time, BigDecimal summa, String currency, BigDecimal currencyRate) {
        this.item = item;
        this.person = person;
        this.time = time;
        this.summa = summa;
        this.currency = currency;
+       this.currencyRate = currencyRate;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -88,12 +91,12 @@ public class Operation  implements java.io.Serializable {
         this.time = time;
     }
     
-    @Column(name="summa", nullable=false)
-    public int getSumma() {
+    @Column(name="summa", nullable=false, precision=10)
+    public BigDecimal getSumma() {
         return this.summa;
     }
     
-    public void setSumma(int summa) {
+    public void setSumma(BigDecimal summa) {
         this.summa = summa;
     }
     
@@ -104,6 +107,15 @@ public class Operation  implements java.io.Serializable {
     
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+    
+    @Column(name="currency_rate", precision=10, scale=4)
+    public BigDecimal getCurrencyRate() {
+        return this.currencyRate;
+    }
+    
+    public void setCurrencyRate(BigDecimal currencyRate) {
+        this.currencyRate = currencyRate;
     }
 
 

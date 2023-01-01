@@ -1,10 +1,11 @@
 package ru.tomtrix.fvds.servlets.operation
 
-import java.text._
 import java.util.Date
+import java.math.BigDecimal
 import javax.servlet.http._
 import javax.servlet.annotation.WebServlet
 import ru.tomtrix.fvds.Finder._
+import ru.tomtrix.fvds.Utils._
 import ru.tomtrix.fvds.Starter._
 import ru.tomtrix.fvds.ExtString._
 import ru.tomtrix.fvds.db.Operation
@@ -20,21 +21,23 @@ class VarlamNewOperation extends VarlamServlet {
     val json = req.getReader.readLine.asJsonObject
     val result = for {
       itemName <- json get "itemName" map {_.toString.str}
-      personName <- json get "personName" map {_.toString.str}
-      summa <- json get "summa" map {_.asInstanceOf[Double].toInt}
+      summa <- json get "summa" flatMap {d => safe {new BigDecimal(d.asInstanceOf[Double])}}
       user <- getUser(req.getHeader("username").str)
       item <- getItem(user, itemName)
-      currency = json get "currency" map {_.toString.str} getOrElse "RUB"
     } yield {
       val date = json get "date" map {s => formatter parse s.toString} getOrElse new Date()
-      logger.info("Date received: " + DateFormat.getInstance().format(date))
-      val operation = new Operation(item, null, date, summa, currency)
-      getPerson(user, personName) foreach operation.setPerson
+      val person = json get "personName" map {_.toString.str} flatMap {p => getPerson(user, p)}
+      val currency = json get "currency" map {_.toString.str} getOrElse "RUB"
+      val currencyRate = json get "currencyRate" flatMap {d => safe {new BigDecimal(d.asInstanceOf[Double])}}
+      val operation = new Operation(item, date, summa, currency)
+      person foreach operation.setPerson
+      currencyRate foreach operation.setCurrencyRate
+
       dao persist operation
-      itemName -> summa
+      (itemName, date, summa, currency, person, currencyRate)
     }
     result match {
-      case Some((x, y)) => Result(resp, 200, 0, Map("msg" -> s"Operation $x ($y rub.) saved")).write()
+      case Some((a, b, c, d, e, f)) => Result(resp, 200, 0, Map("msg" -> s"Operation saved: $a, $b, $c, $d, $e, $f")).write()
       case None => Result(resp, 400, 40).write()
     }
   }

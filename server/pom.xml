@@ -89,7 +89,7 @@
         <dependency>
             <groupId>net.debasishg</groupId>
             <artifactId>redisclient_2.10</artifactId>
-            <version>2.13</version>
+            <version>2.14</version>
         </dependency>
         <!--JFreeChart Data Visualizer Library-->
         <dependency>

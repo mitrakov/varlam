@@ -1,5 +1,6 @@
 package ru.tomtrix.fvds
 
+import java.math.BigDecimal
 import javax.servlet.http.HttpServletResponse
 import scala.util.parsing.json.JSONObject
 import ru.tomtrix.fvds.L18n._
@@ -41,5 +42,5 @@ object CaseClasses {
    * @param summa sum
    * @param person person name
    */
-  case class SingleOperation(id: Long, time: String, item: String, category: String, summa: Int, person: Option[String])
+  case class SingleOperation(id: Long, time: String, item: String, category: String, summa: BigDecimal, currencyCode: String, person: Option[String], currencyRate: Option[BigDecimal])
 }

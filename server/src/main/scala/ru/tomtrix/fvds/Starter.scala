@@ -10,11 +10,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
 /**
  * Starting point. Try: "`curl mitrakoff.com:8080/varlam/version`".
  *
- * 1. Use only Java 8 to build this app (e.g. "`sdk use java 8.302.08.1-amzn`")
+ * 1. Use only Java 8 to build this app (example for SdkMan: "`sdk use java 8.302.08.1-amzn`")
  *
  * 2. After changes, don't forget to update version in [[ru.tomtrix.fvds.servlets.VarlamVersion VarlamVersion]].
  *
- * 3. All DAO are being updated automatically using DB schema on mitrakoff.com (run "mvn package").
+ * 3. All DAO are being updated automatically using DB schema on mitrakoff.com (run "mvn compile").
  *
  * 4. To build app, run "`mvn package`", then "`docker build -t mitrakov/guap-docker-compose .`", then "`docker push mitrakov/guap-docker-compose`"
  */

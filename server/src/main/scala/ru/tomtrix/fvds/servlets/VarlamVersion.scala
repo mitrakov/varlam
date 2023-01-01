@@ -11,6 +11,6 @@ import ru.tomtrix.fvds.CaseClasses.Result
 @WebServlet(urlPatterns = Array("/version"))
 class VarlamVersion extends VarlamServlet {
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse): Unit = safe {
-    Result(resp, 200, 0, Map("msg" -> "Varlam Application 22.12.31.6")).write()
+    Result(resp, 200, 0, Map("msg" -> "Varlam Application 23.1.1.1")).write()
   }
 }

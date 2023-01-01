@@ -1,6 +1,6 @@
 package ru.tomtrix.fvds.servlets.operation
 
-import java.util.Date
+import java.math.BigDecimal
 import javax.servlet.http._
 import javax.servlet.annotation.WebServlet
 import ru.tomtrix.fvds.Utils._
@@ -19,24 +19,29 @@ class VarlamChangeOperation extends VarlamServlet {
     val json = req.getReader.readLine.asJsonObject
     val result = for {
       id <- json get "id" map {_.asInstanceOf[Double].toLong}
-      newItemName <- json get "itemName" map {_.toString.str}
-      newPersonName <- json get "personName" map {_.toString.str}
-      newSumma <- json get "summa" map {_.asInstanceOf[Double].toInt}
-      user <- getUser(req.getHeader("username").str)
       operation <- getOperation(id)
+      user <- getUser(req.getHeader("username").str)
       (itemName, personName, summa) <- getOperationFunc(id) { t =>
         (t.getItem.getName, safe {t.getPerson.getName} getOrElse "NULL", t.getSumma)
       }
-      newItem <- getItem(user, newItemName)
     } yield {
-      val date = json get "date" map {s => formatter parse s.toString} getOrElse new Date()
-      operation.setPerson(getPerson(user, newPersonName).orNull)
-      operation setItem newItem
-      operation setSumma newSumma
-      operation setTime date
+      val newDate = json get "date" map {s => formatter parse s.toString}
+      val newItem = json get "itemName" map {_.toString.str} flatMap {i => getItem(user, i)}
+      val newPerson = json get "personName" map {_.toString.str} flatMap {p => getPerson(user, p)}
+      val newSumma = json get "summa" flatMap {d => safe {new BigDecimal(d.asInstanceOf[Double])}}
+      val newCurrency = json get "currency" map {_.toString.str}
+      val newCurrencyRate = json get "currencyRate" flatMap {d => safe {new BigDecimal(d.asInstanceOf[Double])}}
+
+      newItem foreach operation.setItem
+      newPerson foreach operation.setPerson
+      newDate foreach operation.setTime
+      newSumma foreach operation.setSumma
+      newCurrency foreach operation.setCurrency
+      newCurrencyRate foreach operation.setCurrencyRate
+
       dao merge operation
       operationCache removeFromCache id
-      (id, itemName, personName, summa, newItemName, newPersonName, newSumma)
+      (id, itemName, personName, summa, newItem, newPerson, newSumma)
     }
     result match {
       case Some((a, b, c, d, e, f, g)) => Result(resp, 200, 0,

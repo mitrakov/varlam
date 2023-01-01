@@ -1,7 +1,6 @@
 package ru.tomtrix.fvds
 
 import javax.persistence._
-import scala.language._
 import scala.compat.Platform
 import org.springframework.transaction.annotation.Transactional
 import ru.tomtrix.fvds.Utils._
