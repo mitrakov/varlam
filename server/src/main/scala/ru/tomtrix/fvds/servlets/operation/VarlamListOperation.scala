@@ -33,10 +33,10 @@ class VarlamListOperation extends VarlamServlet {
         val itemIDs = itemOpt.toList ++ categoryOpt.toList.flatten
         // build SQL and parameters
         val sql = req.getPathInfo.str match {
-          case "/all" => "SELECT * FROM operation JOIN item USING (item_id) JOIN category USING (category_id) WHERE user_id = :x ORDER BY time DESC"
-          case x => logger.info(s"x = $x")
+          case "/all" => "SELECT * FROM operation JOIN item USING (item_id) JOIN category USING (category_id) WHERE user_id = :x ORDER BY time DESC, operation_id DESC"
+          case x => logger.info(s"pathInfo = $x")
             val mkstring = if (itemIDs.isEmpty) "-1" else itemIDs.mkString(",") // safe for SQL-injections, because itemIDs is a List[Long]
-            s"SELECT * FROM operation JOIN item USING (item_id) JOIN category USING (category_id) WHERE user_id = :x AND item_id IN ($mkstring) ORDER BY time DESC"
+            s"SELECT * FROM operation JOIN item USING (item_id) JOIN category USING (category_id) WHERE user_id = :x AND item_id IN ($mkstring) ORDER BY time DESC, operation_id DESC"
         }
         // fetch the result
         val result = dao.findBySQL(sql, classOf[Operation], Map("x" -> usr.getUserId)) {_.getOperationId}

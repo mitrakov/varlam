@@ -54,16 +54,10 @@
      * Opens the dialog to change an operation which ID is preserved inside '#operations' container
      * @param id
      */
-    varlam.OperationsBuilder.prototype.changeOperation = function (id, category, item, summa, person, time) {
-        /*var $operations = $('#operations');
-        var elem = $operations.find('[data-id="' + id + '"]');
-        var category = elem.find('.op_category').text();
-        var item = elem.find('.op_item').text();
-        var summa = ~~elem.find('.op_summa').text();
-        var person = elem.find('.op_person').text();*/
+    varlam.OperationsBuilder.prototype.changeOperation = function (id, category, item, summa, person, time, currency) {
         var dateStr = time.split('-');
         var date = new Date(dateStr[2], dateStr[1] - 1, dateStr[0]);
-        this.addOperation.setParameters(id, category, item, summa, person, date);
+        this.addOperation.setParameters(id, category, item, summa, person, date, currency);
         $('#add_operation').click();
     };
 
@@ -117,12 +111,13 @@
                 '<a href="#" class="list-group-item">' +
                     '<div class="op_time" style="margin: 10px; display: inline-block">' + json.time + '</div>' +
                     '<div class="op_summa" style="margin: 10px; display: inline-block">' + json.summa + '</div>' +
+                    '<div class="op_currency" style="margin: 10px; display: inline-block">' + json.currency + '</div>' +
                     '<div class="" style="margin: 10px; display: inline-block">' +
                         '<div class="op_item">' + json.item + '</div>' +
                         '<div class="op_category">' + json.category + '</div>' +
                     '</div>' +
-                    '<div class="op_person" style="margin: 10px; display: inline-block">' + json.person + '</div>' +
-                    '<div style="margin: 10px; display: inline-block" onclick="varlam.opBuilder.changeOperation('+ json.id + ',\'' + json.category + '\',\'' + json.item + '\',' + json.summa + ',\'' + json.person + '\',\'' + json.time + '\')"><span class="glyphicon glyphicon-pencil btn-lg"></span></div>' +
+                    '<div class="op_person" style="margin: 10px; display: inline-block">' + (json.person || '') + '</div>' +
+                    '<div style="margin: 10px; display: inline-block" onclick="varlam.opBuilder.changeOperation('+ json.id + ',\'' + json.category + '\',\'' + json.item + '\',' + json.summa + ',\'' + (json.person || '') + '\',\'' + json.time + '\',\'' + json.currency + '\')"><span class="glyphicon glyphicon-pencil btn-lg"></span></div>' +
                     '<div style="margin: 10px; display: inline-block" onclick="varlam.opBuilder.removeOperation('+ json.id + ')"><span class="glyphicon glyphicon-remove-circle btn-lg"></span></div>'
                 '</a>';
             $operations.jqxListBox('updateItem', {html: item}, operationID);

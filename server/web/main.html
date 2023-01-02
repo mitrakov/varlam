@@ -220,10 +220,25 @@
             </div>
             <div class="col-xs-4 app-full app-vertical-container">
                 <div class="app-vertical-content">
-                    <div class="form-group">
-                        <label for="txt_summa">Сумма</label>
-                        <!-- First we use jqxNumberInput, but it appears to be full of bugs! -->
-                        <input id="txt_summa" class="form-control text-right" type="text" placeholder="Введите сумму" data-placement="left" data-trigger="manual" data-content="Выберите товарную позицию и укажите какую-нибудь сумму. Например, 999р.">
+                    <div class="row app-little">
+                        <div class="col-xs-7">
+                            <div class="form-group">
+                                <label for="txt_summa">Сумма</label>
+                                <input id="txt_summa" class="form-control text-right" type="text" placeholder="000.00" data-placement="left" data-trigger="manual" data-content="Выберите товарную позицию и укажите какую-нибудь сумму. Например, 999р.">
+                            </div>
+                        </div>
+                        <div class="col-xs-5">
+                            <div class="form-group">
+                                <label for="drp_currency">Валюта</label>
+                                <select id="drp_currency" class="form-control">
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="RUB">RUB</option>
+                                    <option value="AMD">AMD</option>
+                                    <option value="THB">THB</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="txt_person">Персона</label>

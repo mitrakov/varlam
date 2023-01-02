@@ -17,6 +17,21 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
  * 3. All DAO are being updated automatically using DB schema on mitrakoff.com (run "mvn compile").
  *
  * 4. To build app, run "`mvn package`", then "`docker build -t mitrakov/guap-docker-compose .`", then "`docker push mitrakov/guap-docker-compose`"
+ *
+ * <br><br>
+ * To debug JS application:
+ *
+ * - set hostname to "localhost:8080" in 'web/scripts/request.js'
+ *
+ * - build server app
+ *
+ * - run "docker-compose up"
+ *
+ * - import SQL data to DB
+ *
+ * - import auth data to Redis
+ *
+ * - open "main.html"
  */
 object Starter {
   /** Spring XML context */

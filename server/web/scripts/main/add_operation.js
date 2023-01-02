@@ -15,9 +15,10 @@
         this.curID = -1;
         this.curCategory = null;
         this.curItem = null;
-        this.curSumma = 0;
+        this.curSumma = -1;
         this.curPerson = null;
         this.curDate = null;
+        this.curCurrency = null;
 
         // create listbox
         $('#list_op_item').jqxListBox({width: '100%', height: '100%'});
@@ -40,9 +41,8 @@
                 $('#btn_opctxt_add_category').removeClass('disabled').text('+');
                 $('#btn_opctxt_add_subcategory').removeClass('disabled').text('Sub');
                 $('#btn_opctxt_add_item').text('+');
-                this.curID = -1;
-                this.curSumma = 0;
-                this.curCategory = this.curItem = this.curPerson = this.curDate = null;
+                this.curID = this.curSumma = -1;
+                this.curCategory = this.curItem = this.curPerson = this.curDate = this.curCurrency = null;
                 tutor.fire('#charts_wrapper');
             }).bind(this))
             .on('open', (function() {
@@ -56,24 +56,26 @@
                         // on OK click handler
                         $('#btn_new_operation').off('click').click((function () {
                             var selected = $('#list_op_item').jqxListBox('getSelectedItem');
-                            var summa = ~~$('#txt_summa').val();
+                            var summa = parseFloat($('#txt_summa').val());
                             var person = $('#txt_person').val();
+                            var currency = $('#drp_currency').val();
                             var date = $('#calendar').jqxCalendar('value');
                             if (!selected || summa < 0) return;
                             // context appending of Person dictionary
                             if (person.length > 0 && json.indexOf(person) < 0) {
                                 new varlam.Request('person/new', JSON.stringify({name: person}), 'POST').done((function () {
-                                    this.newOperation(selected.label, summa, person, date);
+                                    this.newOperation(selected.label, summa, person, date, currency);
                                 }).bind(this));
-                            } else this.newOperation(selected.label, summa, person, date);
+                            } else this.newOperation(selected.label, summa, person, date, currency);
                         }).bind(this));
                     }).bind(this)
                 );
                 // init other components
-                $('#txt_summa').val(this.curSumma === 0 ? '' : this.curSumma);
+                $('#txt_summa').val(this.curSumma < 0 ? '' : this.curSumma);
                 $("#txt_person").val(this.curPerson);
                 $('#calendar').jqxCalendar(this.curDate != null ? 'setDate' : 'today', this.curDate);
                 $('#btn_new_operation').text(this.curID >=0 ? 'Изменить' : 'Добавить');
+                $('#drp_currency').val(this.curCurrency);
                 // init tutor
                 tutor.fire('#txt_summa');
             }).bind(this));
@@ -147,9 +149,9 @@
             }
         }).bind(this));
 
-        // create spinner for summa
+        // create numeric text field for summa
         $('#txt_summa').keypress(function(event) {
-            return (48 <= event.which && event.which <= 57) || event.which === 13;
+            return (event.key <= 9 || event.key === ".");
         });
 
         // create a calendar
@@ -171,14 +173,16 @@
      * @param summa
      * @param person
      * @param date
+     * @param currency
      */
-    varlam.AddOperation.prototype.setParameters = function(id, category, item, summa, person, date) {
+    varlam.AddOperation.prototype.setParameters = function(id, category, item, summa, person, date, currency) {
         this.curID = id;
         this.curCategory = category;
         this.curItem = item;
         this.curSumma = summa;
         this.curPerson = person;
         this.curDate = date;
+        this.curCurrency = currency;
     };
 
     /**
@@ -188,13 +192,14 @@
      * @param {string=} person
      * @param {Date=} date
      */
-    varlam.AddOperation.prototype.newOperation = function (item, summa, person, date) {
+    varlam.AddOperation.prototype.newOperation = function (item, summa, person, date, currency) {
         new varlam.Request('/operation/' + (this.curID >= 0 ? 'change' : 'new'), JSON.stringify({
             id: this.curID >=0 ? this.curID : undefined,
             itemName: item,
-            personName: person || '',
+            personName: person,
             summa: summa,
-            date: date ? date.format('dd-mm-yyyy') : undefined
+            date: date ? date.format('dd-mm-yyyy') : undefined,
+            currency: currency
         }), this.curID >= 0 ? 'PUT' : 'POST').done((function () {
                 $('#dlg_operations').jqxWindow('close');
                 $('#operation_saved').delay(1000).fadeIn('slow').delay(1000).fadeOut('slow');
