@@ -31,6 +31,7 @@ class VarlamChangeOperation extends VarlamServlet {
       val newSumma = json get "summa" flatMap {d => safe {new BigDecimal(d.asInstanceOf[Double])}}
       val newCurrency = json get "currency" map {_.toString.str}
       val newCurrencyRate = json get "currencyRate" flatMap {d => safe {new BigDecimal(d.asInstanceOf[Double])}}
+      val newComment = json get "comment" map {_.toString.str}
 
       newItem foreach operation.setItem
       newPerson foreach operation.setPerson
@@ -38,6 +39,7 @@ class VarlamChangeOperation extends VarlamServlet {
       newSumma foreach operation.setSumma
       newCurrency foreach operation.setCurrency
       newCurrencyRate foreach operation.setCurrencyRate
+      newComment foreach operation.setComment
 
       dao merge operation
       operationCache removeFromCache id
