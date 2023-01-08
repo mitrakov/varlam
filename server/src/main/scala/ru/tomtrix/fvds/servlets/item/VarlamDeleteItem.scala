@@ -22,7 +22,7 @@ class VarlamDeleteItem extends VarlamServlet {
       item <- getItem(user, itemName)
     } yield {
       val m = Map("x" -> item.getItemId)
-      dao.findBySQL("SELECT * FROM operation WHERE item_id = :x", classOf[Operation], m) {o => o}.size
+      dao.findBySQL("SELECT * FROM operation WHERE item_id = :x", classOf[Operation], m) {identity}.size
     }
     result match {
       case Some(0) => Result(resp, 200, 0, Map("msg" -> "it's safe to remove an item")).write()

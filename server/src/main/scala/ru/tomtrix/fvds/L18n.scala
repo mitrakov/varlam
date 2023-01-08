@@ -44,6 +44,8 @@ object L18n {
       // chart errors
     case 50 => Map("msg" -> "Fail to parse parameters. Specify 'month' and 'year'")
     case 51 => Map("msg" -> "Fail to parse parameters. Specify 'step', 'from' and 'categories'")
+      // query errors
+    case 52 => Map("msg" -> "Fail to parse parameters. Required parameters: 'from' and 'to'. Optional parameters: 'function' (SUM, MIN, MAX, AVG). Required headers: 'username'")
       //
     case _ => Map.empty[String, String]
   }

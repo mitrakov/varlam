@@ -1,5 +1,5 @@
 package ru.tomtrix.fvds.db;
-// Generated 01-Jan-2023 18:03:15 by Hibernate Tools 3.2.2.GA
+// Generated 08-Jan-2023 23:04:28 by Hibernate Tools 3.2.2.GA
 
 
 import java.math.BigDecimal;
@@ -33,6 +33,7 @@ public class Operation  implements java.io.Serializable {
      private BigDecimal summa;
      private String currency;
      private BigDecimal currencyRate;
+     private String comment;
 
     public Operation() {
     }
@@ -44,13 +45,14 @@ public class Operation  implements java.io.Serializable {
         this.summa = summa;
         this.currency = currency;
     }
-    public Operation(Item item, Person person, Date time, BigDecimal summa, String currency, BigDecimal currencyRate) {
+    public Operation(Item item, Person person, Date time, BigDecimal summa, String currency, BigDecimal currencyRate, String comment) {
        this.item = item;
        this.person = person;
        this.time = time;
        this.summa = summa;
        this.currency = currency;
        this.currencyRate = currencyRate;
+       this.comment = comment;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -109,13 +111,22 @@ public class Operation  implements java.io.Serializable {
         this.currency = currency;
     }
     
-    @Column(name="currency_rate", precision=10, scale=4)
+    @Column(name="currency_rate", precision=10, scale=5)
     public BigDecimal getCurrencyRate() {
         return this.currencyRate;
     }
     
     public void setCurrencyRate(BigDecimal currencyRate) {
         this.currencyRate = currencyRate;
+    }
+    
+    @Column(name="comment")
+    public String getComment() {
+        return this.comment;
+    }
+    
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
 

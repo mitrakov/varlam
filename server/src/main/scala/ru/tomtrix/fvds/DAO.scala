@@ -96,7 +96,7 @@ class DAO {
     val startTime = Platform.currentTime
     val query = entityManager.createNativeQuery(sql)
     parameters foreach { p => query.setParameter(p._1, p._2)}
-    val result = query.getResultList.toArray.map{t => t.asInstanceOf[Array[Any]]}.map(f).toList
+    val result = query.getResultList.toArray.map{_.asInstanceOf[Array[Any]]}.map(f).toList
     logger debug s"getting instances by native SQL: $sql done in ${Platform.currentTime - startTime} msec"
     result
   } getOrElse List.empty
@@ -117,6 +117,24 @@ class DAO {
     parameters foreach { p => query.setParameter(p._1, p._2)}
     val result = query.getSingleResult.asInstanceOf[T]
     logger debug s"getting instance by SQL: $sql done in ${Platform.currentTime - startTime} msec"
+    f(result)
+  }
+
+  /**
+   * Same as `"findSingleBySQL"` but for primitive data types: java.math.BigDecimal, etc.
+   * @param sql SQL-expression
+   * @param parameters SQL parameters
+   * @param f function applied to found value
+   * @tparam T value type
+   * @tparam V result type
+   * @return Option[ResultType]
+   */
+  def findScalarBySQL[T, V](sql: String, parameters: Map[String, Any] = Map.empty)(f: T => V): Option[V] = safe {
+    val startTime = Platform.currentTime
+    val query = entityManager.createNativeQuery(sql)
+    parameters foreach { p => query.setParameter(p._1, p._2)}
+    val result = query.getSingleResult.asInstanceOf[T]
+    logger debug s"getting scalar by SQL: $sql done in ${Platform.currentTime - startTime} msec"
     f(result)
   }
 }

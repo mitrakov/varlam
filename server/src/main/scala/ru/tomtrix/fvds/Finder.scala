@@ -84,62 +84,62 @@ object Finder extends DAO {
    * @param username user name
    * @return user by name
    */
-  def getUser(username: String): Option[Usr] = getUserFunc(username){ u => u}
+  def getUser(username: String): Option[Usr] = getUserFunc(username) {identity}
 
   /**
    * @param id user ID
    * @return user by ID
    */
-  def getUser(id: Long): Option[Usr] = dao.findById(id, classOf[Usr]){ t => t}
+  def getUser(id: Long): Option[Usr] = dao.findById(id, classOf[Usr]) {identity}
 
   /**
    * @param u user
    * @param name person name
    * @return person by name
    */
-  def getPerson(u: Usr, name: String): Option[Person] = getPersonFunc(u, name){ p => p}
+  def getPerson(u: Usr, name: String): Option[Person] = getPersonFunc(u, name){identity}
 
   /**
    * @param id person ID
    * @return person by ID
    */
-  def getPerson(id: Long): Option[Person] = dao.findById(id, classOf[Person]){ t => t}
+  def getPerson(id: Long): Option[Person] = dao.findById(id, classOf[Person]) {identity}
 
   /**
    * @param u user
    * @param categoryName category name
    * @return category by name
    */
-  def getCategory(u: Usr, categoryName: String): Option[Category] = getCategoryFunc(u, categoryName){ c => c}
+  def getCategory(u: Usr, categoryName: String): Option[Category] = getCategoryFunc(u, categoryName) {identity}
 
   /**
    * @param id category ID
    * @return category by ID
    */
-  def getCategory(id: Long): Option[Category] = dao.findById(id, classOf[Category]){ t => t}
+  def getCategory(id: Long): Option[Category] = dao.findById(id, classOf[Category]) {identity}
 
   /**
    * @param u user
    * @param itemName item name
    * @return item by name
    */
-  def getItem(u: Usr, itemName: String): Option[Item] = getItemFunc(u, itemName){ i => i}
+  def getItem(u: Usr, itemName: String): Option[Item] = getItemFunc(u, itemName) {identity}
 
   /**
    * @param id item ID
    * @return item by name
    */
-  def getItem(id: Long): Option[Item] = dao.findById(id, classOf[Item]){ t => t}
+  def getItem(id: Long): Option[Item] = dao.findById(id, classOf[Item]) {identity}
 
   /**
    * @param id operation ID
    * @return operation by ID
    */
-  def getOperation(id: Long): Option[Operation] = getOperationFunc(id){ t => t}
+  def getOperation(id: Long): Option[Operation] = getOperationFunc(id) {identity}
 
   /**
    * @param u user
    * @return all user's operations
    */
-  def getOperations(u: Usr): List[Operation] = getOperationsFunc(u) { o => o}
+  def getOperations(u: Usr): List[Operation] = getOperationsFunc(u) {identity}
 }

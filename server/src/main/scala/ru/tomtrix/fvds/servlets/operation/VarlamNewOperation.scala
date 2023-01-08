@@ -29,9 +29,11 @@ class VarlamNewOperation extends VarlamServlet {
       val person = json get "personName" map {_.toString.str} flatMap {p => getPerson(user, p)}
       val currency = json get "currency" map {_.toString.str} getOrElse "RUB"
       val currencyRate = json get "currencyRate" flatMap {d => safe {new BigDecimal(d.asInstanceOf[Double])}}
+      val comment = json get "comment" map {_.toString.str}
       val operation = new Operation(item, date, summa, currency)
       person foreach operation.setPerson
       currencyRate foreach operation.setCurrencyRate
+      comment foreach operation.setComment
 
       dao persist operation
       (itemName, date, summa, currency, person, currencyRate)

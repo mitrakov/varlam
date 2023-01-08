@@ -22,8 +22,8 @@ class VarlamDeleteCategory extends VarlamServlet {
       category <- getCategory(user, categoryName)
     } yield {
       val m = Map("x" -> category.getCategoryId)
-      dao.findBySQL("SELECT * FROM category WHERE parent_id = :x", classOf[Category], m) {c => c}.size ->
-        dao.findBySQL("SELECT * FROM item WHERE category_id = :x", classOf[Item], m) {i => i}.size
+      dao.findBySQL("SELECT * FROM category WHERE parent_id = :x", classOf[Category], m) {identity}.size ->
+        dao.findBySQL("SELECT * FROM item WHERE category_id = :x", classOf[Item], m) {identity}.size
     }
     result match {
       case Some((0, 0)) => Result(resp, 200, 0, Map("msg" -> "it's safe to remove a category")).write()
