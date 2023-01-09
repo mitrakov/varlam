@@ -40,7 +40,20 @@ object CaseClasses {
    * @param item item name
    * @param category category name
    * @param summa sum
-   * @param person person name
+   * @param currencyCode currency code in XXX format (USD, EUR, RUB, AMD, THB)
+   * @param person optional person name
+   * @param currencyRate optional currency rate in decimal format with 5 fractional digits
+   * @param comment optinal comment
    */
-  case class SingleOperation(id: Long, time: String, item: String, category: String, summa: BigDecimal, currencyCode: String, person: Option[String], currencyRate: Option[BigDecimal])
+  case class SingleOperation(
+    id: Long,
+    time: String,
+    item: String,
+    category: String,
+    summa: BigDecimal,
+    currencyCode: String,
+    person: Option[String],
+    currencyRate: Option[BigDecimal],
+    comment: Option[String]
+  )
 }

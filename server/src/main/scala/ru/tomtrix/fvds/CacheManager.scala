@@ -1,7 +1,6 @@
 package ru.tomtrix.fvds
 
 import org.springframework.cache.annotation._
-import ru.tomtrix.fvds.Utils._
 import ru.tomtrix.fvds.Starter._
 import ru.tomtrix.fvds.db.Operation
 import ru.tomtrix.fvds.CaseClasses.SingleOperation
@@ -21,7 +20,9 @@ class CacheManager {
     logger info s"Trying to find operation $id"
     dao.findById(id, classOf[Operation]) { op =>
       SingleOperation(op.getOperationId, formatter format op.getTime, op.getItem.getName,
-        op.getItem.getCategory.getName, op.getSumma, op.getCurrency, safe(op.getPerson.getName, _ => {}), Option(op.getCurrencyRate) )
+        op.getItem.getCategory.getName, op.getSumma, op.getCurrency,
+        Option(op.getPerson).map(_.getName), Option(op.getCurrencyRate), Option(op.getComment)
+      )
     }
   }
 
