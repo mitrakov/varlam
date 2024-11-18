@@ -1,4 +1,3 @@
-# deprecated: use k8s/ instead
 # important! requires 'docker-compose' v1.29.1+. Otherwise redis network doesn't work
 version: '3.3'
 
